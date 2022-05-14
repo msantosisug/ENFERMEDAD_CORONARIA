@@ -1,0 +1,24 @@
+
+name: model-CHD
+on: [push]
+jobs:
+  run:
+    runs-on: [ubuntu-latest]
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Entrenamiento de Modelo'
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # flujo de ML
+          pip install -r requerimientos.txt
+          python train.py
+
+          echo "## Metricas del Modelo" >> report.md
+          cat metricas.txt >> report.md
+          # Reporte CML
+          echo "## Visualizacion del Modelo" >> report.md 
+          cml-publish cm.png --md >> report.md
+          cml-publish roc.png --md >> report.md
+          cml-send-comment report.md
