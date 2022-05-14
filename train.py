@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 df_heart = pd.read_csv('train_test.csv', index_col=0)
 df_heart.head(10)
 df_heart.describe()
-df_heart.drop('famhist', axis=1, inplace=True)
+#df_heart.drop('famhist', axis=1, inplace=True)
+df_heart = pd.get_dummies(df_heart, columns = ['famhist'], drop_first=True)
 # Set random seed
 seed = 52
 # split de la data de entrenamiento y de test
